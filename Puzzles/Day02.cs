@@ -11,15 +11,8 @@ public class Day02 : PuzzleBase
             return false;
         }
 
-        if (
-            !report.Zip(report.Skip(1), (a, b) => a <= b).All(x => x) &&
-            !report.Zip(report.Skip(1), (a, b) => a >= b).All(x => x)
-        )
-        {
-            return false;
-        }
-
-        return true;
+        return report.Zip(report.Skip(1), (a, b) => a <= b).All(x => x) ||
+               report.Zip(report.Skip(1), (a, b) => a >= b).All(x => x);
     }
 
     private bool IsSafeV2(int[] report)

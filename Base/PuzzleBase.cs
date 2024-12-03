@@ -23,4 +23,6 @@ public abstract class PuzzleBase : IPuzzle
             result.Add(line);
         }
     }
+
+    protected static string ReadAll() => string.Join("\n", ReadLines());
 }
