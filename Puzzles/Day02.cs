@@ -4,30 +4,15 @@ using Base;
 
 public class Day02 : PuzzleBase
 {
-    private bool IsSafe(int[] report)
-    {
-        if (report.Zip(report.Skip(1), (a, b) => Math.Abs(a - b)).Any(x => x is < 1 or > 3))
-        {
-            return false;
-        }
+    private bool IsSafe(int[] report) =>
+        report.Zip(report.Skip(1), (a, b) => Math.Abs(a - b)).All(x => x is >= 1 and <= 3) &&
+        (
+            report.Zip(report.Skip(1), (a, b) => a <= b).All(x => x) ||
+            report.Zip(report.Skip(1), (a, b) => a >= b).All(x => x)
+        );
 
-        return report.Zip(report.Skip(1), (a, b) => a <= b).All(x => x) ||
-               report.Zip(report.Skip(1), (a, b) => a >= b).All(x => x);
-    }
-
-    private bool IsSafeV2(int[] report)
-    {
-        for (var i = 0; i < report.Length; i++)
-        {
-            var candidate = report.Take(i).Concat(report.Skip(i + 1)).ToArray();
-            if (this.IsSafe(candidate))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
+    private bool IsSafeV2(int[] report) =>
+        Enumerable.Range(0, report.Length).Any(i => this.IsSafe(report.Take(i).Concat(report.Skip(i + 1)).ToArray()));
 
     public override void Solve()
     {
