@@ -72,10 +72,6 @@ public class Day05 : PuzzleBase
         var separator = lines.Select((x, i) => (Value: x, Index: i)).First(x => string.IsNullOrEmpty(x.Value)).Index;
         var orders = lines.Take(separator).Select(x => x.ExtractTokens('|').Select(int.Parse).ToArray()).ToArray();
         var updates = lines.Skip(separator + 1).Select(x => x.ExtractTokens(',').Select(int.Parse).ToArray()).ToArray();
-        var vertices = orders.Select(x => x[0]).Concat(orders.Select(x => x[1])).Concat(updates.SelectMany(x => x))
-            .Distinct().Order().ToArray();
-        var n = vertices.Max();
-
 
         var updatesIsCorrect = updates
             .Select(update => (Update: update, IsCorrect: this.IsCorrectUpdate(orders, update))).ToArray();
@@ -87,25 +83,21 @@ public class Day05 : PuzzleBase
             .Select(x => this.Correct(orders, x)).Select(x => x[x.Length / 2]).Sum());
     }
 
-    private class Comparer : IComparer<int>
+    private class Comparer(int[][] distance) : IComparer<int>
     {
-        private readonly int[][] distance;
-
-        public Comparer(int[][] distance) => this.distance = distance;
-
         public int Compare(int x, int y)
         {
-            if (this.distance[y][x] == 0)
+            if (distance[x][y] == 0)
             {
                 return 0;
             }
 
-            if (this.distance[x][y] != Infinity)
+            if (distance[x][y] != Infinity)
             {
                 return -1;
             }
 
-            if (this.distance[y][x] != Infinity)
+            if (distance[y][x] != Infinity)
             {
                 return 1;
             }
