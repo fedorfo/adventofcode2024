@@ -41,7 +41,7 @@ public static class Helpers
         return result;
     }
 
-    public static IEnumerable<string> ExtractTokens(string line, params char[] delimiters)
+    public static IEnumerable<string> ExtractTokens(this string line, params char[] delimiters)
     {
         if (delimiters.Length == 0)
         {
