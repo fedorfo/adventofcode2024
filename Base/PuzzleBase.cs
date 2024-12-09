@@ -25,4 +25,6 @@ public abstract class PuzzleBase : IPuzzle
     }
 
     protected static string ReadAll() => string.Join("\n", ReadLines());
+
+    protected static char[][] ReadMap() => ReadLines().Select(x=>x.ToArray()).ToArray();
 }

@@ -20,6 +20,7 @@ public record V2(int X, int Y)
     public static V2 operator -(V2 l, V2 r) => new(l.X - r.X, l.Y - r.Y);
 
     public static V2 operator /(V2 p, int l) => new(p.X / l, p.Y / l);
+    public static V2 operator *(V2 p, int l) => new(p.X * l, p.Y * l);
 
     public static bool operator <(V2 l, V2 r) => l.X < r.X && l.Y < r.Y;
 
