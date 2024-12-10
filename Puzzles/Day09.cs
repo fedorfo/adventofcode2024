@@ -4,19 +4,19 @@ using Base;
 
 public class Day09 : PuzzleBase
 {
-    private (int[] fiels, int[] spaces) PrepareFilesAndSpaces(int[] diskMap) => (
+    private static (int[] fiels, int[] spaces) PrepareFilesAndSpaces(int[] diskMap) => (
         diskMap.Where((_, i) => i % 2 == 0).ToArray(), diskMap.Where((_, i) => i % 2 == 1).ToArray());
 
-    private void Solve1(int[] diskMap)
+    private static void Solve1(int[] diskMap)
     {
-        var (files, spaces) = this.PrepareFilesAndSpaces(diskMap);
+        var (files, spaces) = PrepareFilesAndSpaces(diskMap);
         var current = files.Length - 1;
         var result = new List<int>();
         for (var i = 0; i < files.Length; i++)
         {
             result.AddRange(Enumerable.Repeat(i, files[i]));
 
-            if (i >= spaces.Count())
+            if (i >= spaces.Length)
             {
                 continue;
             }
@@ -46,9 +46,9 @@ public class Day09 : PuzzleBase
         Console.WriteLine(result.Select((x, i) => (long)x * i).Sum());
     }
 
-    private void Solve2(int[] diskMap)
+    private static void Solve2(int[] diskMap)
     {
-        var (files, spaces) = this.PrepareFilesAndSpaces(diskMap);
+        var (files, spaces) = PrepareFilesAndSpaces(diskMap);
 
         var spaceOccupiedByFiles = spaces.Select(_ => new List<int>()).ToArray();
         var fileMoved = files.Select(_ => false).ToArray();
@@ -83,7 +83,7 @@ public class Day09 : PuzzleBase
     public override void Solve()
     {
         var diskMap = ReadAll().Select(x => x - '0').ToArray();
-        this.Solve1(diskMap);
-        this.Solve2(diskMap);
+        Solve1(diskMap);
+        Solve2(diskMap);
     }
 }

@@ -7,10 +7,10 @@ public class Day05 : PuzzleBase
 {
     private const int Infinity = 1000000000;
 
-    private int[][] FilterOrders(int[][] orders, int[] update) =>
+    private static int[][] FilterOrders(int[][] orders, int[] update) =>
         orders.Where(x => update.Contains(x[0]) && update.Contains(x[1])).ToArray();
 
-    private int[][] PrepareDistance(int[][] orders, int[] update)
+    private static int[][] PrepareDistance(int[][] orders, int[] update)
     {
         var vertices = orders.Select(x => x[0]).Concat(orders.Select(x => x[1])).Concat(update)
             .Distinct().Order().ToArray();
@@ -42,10 +42,10 @@ public class Day05 : PuzzleBase
         return distance;
     }
 
-    private bool IsCorrectUpdate(int[][] orders, int[] update)
+    private static bool IsCorrectUpdate(int[][] orders, int[] update)
     {
-        orders = this.FilterOrders(orders, update);
-        var distance = this.PrepareDistance(orders, update);
+        orders = FilterOrders(orders, update);
+        var distance = PrepareDistance(orders, update);
 
         for (var i = 0; i < update.Length; i++)
         for (var j = i + 1; j < update.Length; j++)
@@ -59,10 +59,10 @@ public class Day05 : PuzzleBase
         return true;
     }
 
-    private int[] Correct(int[][] orders, int[] update)
+    private static int[] Correct(int[][] orders, int[] update)
     {
-        orders = this.FilterOrders(orders, update);
-        var distance = this.PrepareDistance(orders, update);
+        orders = FilterOrders(orders, update);
+        var distance = PrepareDistance(orders, update);
         return update.Order(new Comparer(distance)).ToArray();
     }
 
@@ -74,16 +74,16 @@ public class Day05 : PuzzleBase
         var updates = lines.Skip(separator + 1).Select(x => x.ExtractTokens(',').Select(int.Parse).ToArray()).ToArray();
 
         var updatesIsCorrect = updates
-            .Select(update => (Update: update, IsCorrect: this.IsCorrectUpdate(orders, update))).ToArray();
+            .Select(update => (Update: update, IsCorrect: IsCorrectUpdate(orders, update))).ToArray();
         Console.WriteLine(updatesIsCorrect.Where(x => x.IsCorrect).Select(x => x.Update).Select(x => x[x.Length / 2])
             .Sum());
 
 
         Console.WriteLine(updatesIsCorrect.Where(x => !x.IsCorrect).Select(x => x.Update)
-            .Select(x => this.Correct(orders, x)).Select(x => x[x.Length / 2]).Sum());
+            .Select(x => Correct(orders, x)).Select(x => x[x.Length / 2]).Sum());
     }
 
-    private class Comparer(int[][] distance) : IComparer<int>
+    private sealed class Comparer(int[][] distance) : IComparer<int>
     {
         public int Compare(int x, int y)
         {

@@ -5,7 +5,7 @@ using Helpers;
 
 public class Day08 : PuzzleBase
 {
-    private HashSet<V2> GetAntiNodes(Dictionary<char, V2[]> nodesByF, V2 mapSize, int iterations = 1)
+    private static HashSet<V2> GetAntiNodes(Dictionary<char, V2[]> nodesByF, V2 mapSize, int iterations = 1)
     {
         var antiNodes = new HashSet<V2>();
         foreach (var key in nodesByF.Keys)
@@ -64,7 +64,7 @@ public class Day08 : PuzzleBase
         }
 
         var nodesByF = nodes.GroupBy(x => x.F).ToDictionary(x => x.Key, x => x.Select(y => y.P).ToArray());
-        Console.WriteLine(this.GetAntiNodes(nodesByF, mapSize).Count);
-        Console.WriteLine(this.GetAntiNodes(nodesByF, mapSize, int.Max(mapSize.X, mapSize.Y)).Count);
+        Console.WriteLine(GetAntiNodes(nodesByF, mapSize).Count);
+        Console.WriteLine(GetAntiNodes(nodesByF, mapSize, int.Max(mapSize.X, mapSize.Y)).Count);
     }
 }

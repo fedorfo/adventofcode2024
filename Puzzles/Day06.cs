@@ -5,7 +5,7 @@ using Helpers;
 
 public class Day06 : PuzzleBase
 {
-    private (V2 position, V2 speed) GetInitialPosition(char[][] map)
+    private static (V2 position, V2 speed) GetInitialPosition(char[][] map)
     {
         for (var i = 0; i < map.Length; i++)
         for (var j = 0; j < map[0].Length; j++)
@@ -19,7 +19,7 @@ public class Day06 : PuzzleBase
         throw new InvalidOperationException("No initial position found");
     }
 
-    private (V2 position, V2 speed)? Next(char[][] map, V2 position, V2 speed)
+    private static (V2 position, V2 speed)? Next(char[][] map, V2 position, V2 speed)
     {
         var next = position + speed;
         if (!(next >= V2.Zero && next < new V2(map.Length, map[0].Length)))
@@ -35,9 +35,9 @@ public class Day06 : PuzzleBase
         return (position, new V2(speed.Y, -speed.X));
     }
 
-    private int Solve1(char[][] map)
+    private static int Solve1(char[][] map)
     {
-        var (position, speed) = this.GetInitialPosition(map);
+        var (position, speed) = GetInitialPosition(map);
         map[position.X][position.Y] = '.';
         var visited = new HashSet<(V2 Position, V2 speed)>();
         while (true)
@@ -47,7 +47,7 @@ public class Day06 : PuzzleBase
                 return -1;
             }
 
-            var next = this.Next(map, position, speed);
+            var next = Next(map, position, speed);
             if (next == null)
             {
                 break;
@@ -63,7 +63,7 @@ public class Day06 : PuzzleBase
     public override void Solve()
     {
         var input = ReadLines();
-        Console.WriteLine(this.Solve1(input.Select(x => x.ToArray()).ToArray()));
+        Console.WriteLine(Solve1(input.Select(x => x.ToArray()).ToArray()));
         var res2 = 0;
         for (var i = 0; i < input.Count; i++)
         {
@@ -76,7 +76,7 @@ public class Day06 : PuzzleBase
 
                 var map = input.Select(x => x.ToArray()).ToArray();
                 map[i][j] = '#';
-                if (this.Solve1(map) == -1)
+                if (Solve1(map) == -1)
                 {
                     res2++;
                 }

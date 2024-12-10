@@ -6,7 +6,7 @@ using MoreLinq.Extensions;
 
 public class Day10 : PuzzleBase
 {
-    private int ScoreV1(char[][] map, V2 p)
+    private static int ScoreV1(char[][] map, V2 p)
     {
         var mapSize = new V2(map.Length, map[0].Length);
         if (map[p.X][p.Y] != '0')
@@ -32,7 +32,7 @@ public class Day10 : PuzzleBase
         return V2.EnumerateRange(V2.Zero, mapSize).Count(v => visited.Contains(v) && map[v.X][v.Y] == '9');
     }
 
-    private int ScoreV2(char[][] map, V2 p)
+    private static int ScoreV2(char[][] map, V2 p)
     {
         var mapSize = new V2(map.Length, map[0].Length);
         var dp = map.Select(x => x.Select(_ => 0).ToArray()).ToArray();
@@ -54,7 +54,7 @@ public class Day10 : PuzzleBase
     {
         var map = ReadMap();
         var mapSize = new V2(map.Length, map[0].Length);
-        Console.WriteLine(V2.EnumerateRange(V2.Zero, mapSize).Select(p => this.ScoreV1(map, p)).Sum());
-        Console.WriteLine(V2.EnumerateRange(V2.Zero, mapSize).Select(p => this.ScoreV2(map, p)).Sum());
+        Console.WriteLine(V2.EnumerateRange(V2.Zero, mapSize).Select(p => ScoreV1(map, p)).Sum());
+        Console.WriteLine(V2.EnumerateRange(V2.Zero, mapSize).Select(p => ScoreV2(map, p)).Sum());
     }
 }
