@@ -1,45 +1,31 @@
 namespace AdventOfCode2024.Helpers;
 
-public interface IGraph<TVertex>
-{
-    IEnumerable<TVertex> GetVertices();
-    IEnumerable<(TVertex Vertex, long Distance)> GetEdges(TVertex v);
-}
-
 public static class GraphAlgo
 {
-    public static (Dictionary<TVertex, long> Distance, Dictionary<TVertex, (TVertex Parent, long Distance)> Path)
-        Dijikstra<TVertex>(IGraph<TVertex> graph, params TVertex[] startVertices)
+    public static IEnumerable<PathItem<TVertex>> Bfs<TVertex>(IEnumerable<TVertex> start,
+        Func<TVertex, IEnumerable<TVertex>> next)
         where TVertex : notnull
     {
-        var queue = new PriorityQueue<TVertex, long>();
-        var distance = new Dictionary<TVertex, long>();
-        var path = new Dictionary<TVertex, (TVertex Parent, long Distance)>();
-        foreach (var start in startVertices)
+        var visited = new Dictionary<TVertex, PathItem<TVertex>>();
+        var queue = new Queue<TVertex>();
+        foreach (var v in start)
         {
-            queue.Enqueue(start, 0);
-            distance[start] = 0;
-            path[start] = (start, 0);
+            queue.Enqueue(v);
+            visited[v] = new PathItem<TVertex>(v, 0, null);
+            yield return visited[v];
         }
 
-        while (queue.TryDequeue(out var v, out var vDistance))
+        while (queue.Count > 0)
         {
-            if (distance[v] != vDistance)
+            var v = queue.Dequeue();
+            foreach (var u in next(v))
             {
-                continue;
-            }
-
-            foreach (var u in graph.GetEdges(v))
-            {
-                if (distance.GetValueOrDefault(u.Vertex, long.MaxValue) > distance[v] + u.Distance)
+                if (visited.TryAdd(u, new PathItem<TVertex>(u, visited[v].Distance + 1, visited[v])))
                 {
-                    distance[u.Vertex] = distance[v] + u.Distance;
-                    path[u.Vertex] = (v, u.Distance);
-                    queue.Enqueue(u.Vertex, distance[u.Vertex]);
+                    yield return visited[u];
+                    queue.Enqueue(u);
                 }
             }
         }
-
-        return (distance, path);
     }
 }

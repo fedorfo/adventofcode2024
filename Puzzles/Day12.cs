@@ -5,33 +5,6 @@ using Helpers;
 
 public class Day12 : PuzzleBase
 {
-    private List<V2> Bfs(Dictionary<V2, bool> visited, Map map, V2 start)
-    {
-        var queue = new Queue<V2>();
-        queue.Enqueue(start);
-        visited[start] = true;
-        var result = new List<V2> { start };
-        while (queue.Count > 0)
-        {
-            var current = queue.Dequeue();
-            foreach (var neighbour in current.GetNeighbours4())
-            {
-                if (
-                    map.InBounds(neighbour)
-                    && !visited.GetValueOrDefault(neighbour, false)
-                    && map[neighbour] == map[start]
-                )
-                {
-                    visited[neighbour] = true;
-                    queue.Enqueue(neighbour);
-                    result.Add(neighbour);
-                }
-            }
-        }
-
-        return result;
-    }
-
     private int GetScore(List<V2> area, Map map)
     {
         var square = area.Count;
@@ -72,13 +45,18 @@ public class Day12 : PuzzleBase
     public override void Solve()
     {
         var map = ReadMap();
-        var visited = new Dictionary<V2, bool>();
+        var visited = new HashSet<V2>();
         var areas = new List<List<V2>>();
         foreach (var v in map.EnumeratePositions())
         {
-            if (!visited.GetValueOrDefault(v, false))
+            if (!visited.Contains(v))
             {
-                areas.Add(this.Bfs(visited, map, v));
+                var area = GraphAlgo.Bfs(
+                    [v],
+                    x => x.GetNeighbours4().Where(y => map.InBounds(y) && map[x] == map[y])
+                ).Select(x => x.Vertex).ToList();
+                visited.UnionWith(area);
+                areas.Add(area);
             }
         }
 
