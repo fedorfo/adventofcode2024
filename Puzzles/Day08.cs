@@ -51,7 +51,7 @@ public class Day08 : PuzzleBase
 
     public override void Solve()
     {
-        var map = ReadMap();
+        var map = ReadCharMap();
         var mapSize = new V2(map.Length, map[0].Length);
         var nodes = new List<(char F, V2 P)>();
         for (var i = 0; i < map.Length; i++)

@@ -1,6 +1,7 @@
 namespace AdventOfCode2024.Base;
 
 using System.Globalization;
+using Helpers;
 
 public abstract class PuzzleBase : IPuzzle
 {
@@ -26,5 +27,6 @@ public abstract class PuzzleBase : IPuzzle
 
     protected static string ReadAll() => string.Join("\n", ReadLines());
 
-    protected static char[][] ReadMap() => ReadLines().Select(x=>x.ToArray()).ToArray();
+    protected static char[][] ReadCharMap() => ReadLines().Select(x => x.ToArray()).ToArray();
+    protected static Map ReadMap() => new(ReadCharMap());
 }

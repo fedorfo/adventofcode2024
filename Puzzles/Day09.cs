@@ -77,6 +77,7 @@ public class Day09 : PuzzleBase
                 result.AddRange(Enumerable.Repeat(0, spaces[i]));
             }
         }
+
         Console.WriteLine(result.Select((x, i) => (long)x * i).Sum());
     }
 

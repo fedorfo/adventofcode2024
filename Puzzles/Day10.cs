@@ -52,7 +52,7 @@ public class Day10 : PuzzleBase
 
     public override void Solve()
     {
-        var map = ReadMap();
+        var map = ReadCharMap();
         var mapSize = new V2(map.Length, map[0].Length);
         Console.WriteLine(V2.EnumerateRange(V2.Zero, mapSize).Select(p => ScoreV1(map, p)).Sum());
         Console.WriteLine(V2.EnumerateRange(V2.Zero, mapSize).Select(p => ScoreV2(map, p)).Sum());
