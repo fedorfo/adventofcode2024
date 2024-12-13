@@ -5,14 +5,14 @@ using Helpers;
 
 public class Day12 : PuzzleBase
 {
-    private int GetScore(List<V2> area, Map map)
+    private static int GetScore(List<V2> area, Map map)
     {
         var square = area.Count;
         var perimeter = area.Select(x => x.GetNeighbours4().Count(y => !map.InBounds(y) || map[y] != map[x])).Sum();
         return square * perimeter;
     }
 
-    private int GetScoreV2(List<V2> area, Map map)
+    private static int GetScoreV2(List<V2> area, Map map)
     {
         var square = area.Count;
         var hs = new[] { new List<V2>(), new List<V2>() };
@@ -60,7 +60,7 @@ public class Day12 : PuzzleBase
             }
         }
 
-        Console.WriteLine(areas.Select(x => this.GetScore(x, map)).Sum());
-        Console.WriteLine(areas.Select(x => this.GetScoreV2(x, map)).Sum());
+        Console.WriteLine(areas.Select(x => GetScore(x, map)).Sum());
+        Console.WriteLine(areas.Select(x => GetScoreV2(x, map)).Sum());
     }
 }
