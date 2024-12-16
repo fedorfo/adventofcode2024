@@ -16,7 +16,7 @@ public class Day02 : PuzzleBase
 
     public override void Solve()
     {
-        var reports = ReadLines().Select(x => x.Split().Select(int.Parse).ToArray()).ToArray();
+        var reports = ReadBlockLines().Select(x => x.Split().Select(int.Parse).ToArray()).ToArray();
         Console.WriteLine(reports.Count(this.IsSafe));
         Console.WriteLine(reports.Count(this.IsSafeV2));
     }

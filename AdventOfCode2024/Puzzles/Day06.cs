@@ -62,7 +62,7 @@ public class Day06 : PuzzleBase
 
     public override void Solve()
     {
-        var input = ReadLines();
+        var input = ReadBlockLines().ToList();
         Console.WriteLine(Solve1(input.Select(x => x.ToArray()).ToArray()));
         var res2 = 0;
         for (var i = 0; i < input.Count; i++)

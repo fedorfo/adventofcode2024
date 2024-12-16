@@ -68,10 +68,8 @@ public class Day05 : PuzzleBase
 
     public override void Solve()
     {
-        var lines = ReadLines();
-        var separator = lines.Select((x, i) => (Value: x, Index: i)).First(x => string.IsNullOrEmpty(x.Value)).Index;
-        var orders = lines.Take(separator).Select(x => x.ExtractTokens('|').Select(int.Parse).ToArray()).ToArray();
-        var updates = lines.Skip(separator + 1).Select(x => x.ExtractTokens(',').Select(int.Parse).ToArray()).ToArray();
+        var orders = ReadBlockLines().Select(x => x.ExtractTokens('|').Select(int.Parse).ToArray()).ToArray();
+        var updates = ReadBlockLines().Select(x => x.ExtractTokens(',').Select(int.Parse).ToArray()).ToArray();
 
         var updatesIsCorrect = updates
             .Select(update => (Update: update, IsCorrect: IsCorrectUpdate(orders, update))).ToArray();

@@ -51,20 +51,18 @@ public class Day08 : PuzzleBase
 
     public override void Solve()
     {
-        var map = ReadCharMap();
-        var mapSize = new V2(map.Length, map[0].Length);
+        var map = ReadMap();
         var nodes = new List<(char F, V2 P)>();
-        for (var i = 0; i < map.Length; i++)
-        for (var j = 0; j < map.Length; j++)
+        foreach (var v in map.EnumeratePositions())
         {
-            if (map[i][j] != '.')
+            if (map[v] != '.')
             {
-                nodes.Add((map[i][j], new V2(i, j)));
+                nodes.Add((map[v], v));
             }
         }
 
         var nodesByF = nodes.GroupBy(x => x.F).ToDictionary(x => x.Key, x => x.Select(y => y.P).ToArray());
-        Console.WriteLine(GetAntiNodes(nodesByF, mapSize).Count);
-        Console.WriteLine(GetAntiNodes(nodesByF, mapSize, int.Max(mapSize.X, mapSize.Y)).Count);
+        Console.WriteLine(GetAntiNodes(nodesByF, map.Size).Count);
+        Console.WriteLine(GetAntiNodes(nodesByF, map.Size, int.Max(map.Size.X, map.Size.Y)).Count);
     }
 }

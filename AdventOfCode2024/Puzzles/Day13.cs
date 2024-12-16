@@ -30,16 +30,22 @@ public class Day13 : PuzzleBase
         {
             return (solution[0].ToLong() * 3) + solution[1].ToLong();
         }
+
         return 0;
     }
 
     public override void Solve()
     {
-        var lines = ReadLines();
         var clawMachines = new List<ClawMachineConfig>();
-        for (var i = 0; i < lines.Count; i += 4)
+        while (true)
         {
-            clawMachines.Add(Parse(lines.Skip(i).Take(3).ToArray()));
+            var block = ReadBlockLines().ToList();
+            if (block.Count == 0)
+            {
+                break;
+            }
+
+            clawMachines.Add(Parse(block.ToArray()));
         }
 
         Console.WriteLine(

@@ -10,23 +10,22 @@ public abstract class PuzzleBase : IPuzzle
     public virtual string InputFileName => $"{this.Day:00}.txt";
     public abstract void Solve();
 
-    protected static List<string> ReadLines()
+    protected static IEnumerable<string> ReadBlockLines()
     {
-        var result = new List<string>();
         while (true)
         {
             var line = Console.ReadLine();
-            if (line is null)
+            if (string.IsNullOrEmpty(line))
             {
-                return result;
+                yield break;
             }
 
-            result.Add(line);
+            yield return line;
         }
     }
 
-    protected static string ReadAll() => string.Join("\n", ReadLines());
+    protected static string ReadBlockText() => string.Join("\n", ReadBlockLines());
 
-    protected static char[][] ReadCharMap() => ReadLines().Select(x => x.ToArray()).ToArray();
+    protected static char[][] ReadCharMap() => ReadBlockLines().Select(x => x.ToArray()).ToArray();
     protected static Map ReadMap() => new(ReadCharMap());
 }

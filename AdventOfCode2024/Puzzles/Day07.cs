@@ -34,8 +34,7 @@ public class Day07 : PuzzleBase
 
     public override void Solve()
     {
-        var input = ReadLines();
-        var equations = input.Select(x => x.ExtractTokens(' ', ':').Select(long.Parse).ToArray()).ToArray();
+        var equations = ReadBlockLines().Select(x => x.ExtractTokens(' ', ':').Select(long.Parse).ToArray()).ToArray();
         Console.WriteLine(equations
             .Select(x => SolveEquation(x.First(), x.Skip(1).ToArray(), [Sum, Mult])).Sum()
         );

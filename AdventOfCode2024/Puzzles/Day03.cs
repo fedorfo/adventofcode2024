@@ -14,7 +14,7 @@ public class Day03 : PuzzleBase
 
     public override void Solve()
     {
-        var input = ReadAll();
+        var input = ReadBlockText();
         var muls = RegexMul.Matches(input)
             .Select(x => (Value: int.Parse(x.Groups[1].Value) * int.Parse(x.Groups[2].Value), x.Index)).ToArray();
         var switchers = new[] { (-1, true) }

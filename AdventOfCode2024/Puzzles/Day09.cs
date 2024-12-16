@@ -83,7 +83,7 @@ public class Day09 : PuzzleBase
 
     public override void Solve()
     {
-        var diskMap = ReadAll().Select(x => x - '0').ToArray();
+        var diskMap = ReadBlockText().Select(x => x - '0').ToArray();
         Solve1(diskMap);
         Solve2(diskMap);
     }

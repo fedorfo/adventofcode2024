@@ -47,7 +47,7 @@ public class Day11 : PuzzleBase
 
     public override void Solve()
     {
-        var stones = ReadLines().Single().ExtractTokens().Select(long.Parse).ToList();
+        var stones = ReadBlockLines().Single().ExtractTokens().Select(long.Parse).ToList();
         var map = new Dictionary<long, List<long>>();
         stones.ForEach(x => ExtendMap(map, x));
         var stonesDict = map.Keys.ToDictionary(x => x, _ => (long)0);
