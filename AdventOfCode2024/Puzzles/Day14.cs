@@ -47,7 +47,7 @@ public class Day14 : PuzzleBase
         }
 
         components = components.OrderByDescending(x => x.Count).ToList();
-        return components[0].Count > positions.Count*4/10;
+        return components[0].Count > positions.Count * 4 / 10;
     }
 
     public override void Solve()
@@ -77,7 +77,7 @@ public class Day14 : PuzzleBase
         Console.WriteLine(result.Aggregate(1, (x, res) => x * res));
 
 
-        for(var step = 0; step < 100000; step++)
+        for (var step = 0; step < 100000; step++)
         {
             var positions = this.GetPositions(robots, step);
             if (this.LooksLikeChristmasTree(positions))

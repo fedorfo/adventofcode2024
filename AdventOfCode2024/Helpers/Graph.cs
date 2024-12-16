@@ -28,4 +28,38 @@ public static class GraphAlgo
             }
         }
     }
+
+    public static IEnumerable<PathItem<TVertex>> Dijikstra<TVertex>(IEnumerable<TVertex> startVertices,
+        Func<TVertex, IEnumerable<(TVertex Vertex, long Distance)>> next)
+        where TVertex : notnull
+    {
+        var queue = new PriorityQueue<TVertex, long>();
+        var distance = new Dictionary<TVertex, long>();
+        var path = new Dictionary<TVertex, PathItem<TVertex>>();
+        foreach (var start in startVertices)
+        {
+            queue.Enqueue(start, 0);
+            distance[start] = 0;
+            path[start] = new PathItem<TVertex>(start, 0, null);
+        }
+
+        while (queue.TryDequeue(out var v, out var vDistance))
+        {
+            if (distance[v] != vDistance)
+            {
+                continue;
+            }
+
+            yield return path[v];
+            foreach (var u in next(v))
+            {
+                if (distance.GetValueOrDefault(u.Vertex, long.MaxValue) > distance[v] + u.Distance)
+                {
+                    distance[u.Vertex] = distance[v] + u.Distance;
+                    path[u.Vertex] = new PathItem<TVertex>(u.Vertex, distance[u.Vertex], path[v]);
+                    queue.Enqueue(u.Vertex, distance[u.Vertex]);
+                }
+            }
+        }
+    }
 }

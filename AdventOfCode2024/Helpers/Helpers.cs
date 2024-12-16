@@ -69,6 +69,7 @@ public static class Helpers
                     {
                         A[j, k] -= factor * A[i, k];
                     }
+
                     b[j] -= factor * b[i];
                 }
             }
@@ -81,6 +82,7 @@ public static class Helpers
             {
                 sum += A[i, j] * x[j];
             }
+
             x[i] = (b[i] - sum) / A[i, i];
         }
 

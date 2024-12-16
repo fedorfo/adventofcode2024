@@ -60,5 +60,8 @@ public record V2(int X, int Y)
         }
     }
 
+    public V2 CCW() => new(-this.Y, this.X);
+    public V2 CW() => new(this.Y, -this.X);
+
     public override string ToString() => $"({this.X},{this.Y})";
 }

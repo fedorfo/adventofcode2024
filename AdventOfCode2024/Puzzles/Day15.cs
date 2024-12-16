@@ -65,7 +65,7 @@ public class Day15 : PuzzleBase
         var map1 = map.Copy();
         var commands = ReadBlockText().Replace("\n", "");
         commands.ForEach(x => ExecuteCommand(map1, x));
-        Console.WriteLine(map1.EnumeratePositions().Where(x => map[x] == 'O').Sum(x => (x.X * 100) + x.Y));
+        Console.WriteLine(map1.EnumeratePositions().Where(x => map1[x] == 'O').Sum(x => (x.X * 100) + x.Y));
 
         var map2 = new Map(map.GetMap().Select(x => string.Join("", x.Select(y => y switch
         {

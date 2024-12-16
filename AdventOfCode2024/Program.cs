@@ -1,6 +1,6 @@
-﻿using AdventOfCode2024.Base;
+﻿namespace AdventOfCode2024;
 
-namespace AdventOfCode2024;
+using Base;
 
 public class Program
 {
