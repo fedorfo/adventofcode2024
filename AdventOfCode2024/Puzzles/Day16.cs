@@ -13,7 +13,7 @@ public class Day16 : PuzzleBase
         map[start] = '.';
         map[end] = '.';
         var walker = new MapWalker(map);
-        var path = GraphAlgo.Dijikstra<(V2 Vertex, V2 Direction)>([(start, new V2(0, 1))], walker.Next).ToArray();
+        var path = GraphAlgo.Dijikstra([(Vertex: start, Direction: new V2(0, 1))], walker.Next).ToArray();
         var result = path.First(x => x.Vertex.Vertex == end);
         Console.WriteLine(result.Distance);
 
