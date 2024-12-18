@@ -19,13 +19,13 @@ public class Day18 : PuzzleBase
 
     private static long DistanceToExit(IEnumerable<V2> bytes)
     {
-        var map = new Map(71, 71);
-        bytes.ForEach(x => map[x] = '#');
-        var result = GraphAlgo.Bfs<V2>(
+        var end = new V2(70, 70);
+        var set = bytes.ToHashSet();
+        var result = GraphAlgo.Bfs(
                 [V2.Zero],
-                v => v.GetNeighbours4().Where(x => map.InBounds(x) && map[x] != '#')
+                v => v.GetNeighbours4().Where(x => x >= V2.Zero && x <= end && !set.Contains(x))
             )
-            .SingleOrDefault(x => x.Vertex == map.Size - new V2(1, 1));
+            .SingleOrDefault(x => x.Vertex == end);
         return result?.Distance ?? -1;
     }
 }
