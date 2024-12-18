@@ -88,4 +88,24 @@ public static class Helpers
 
         return x;
     }
+
+    public static int BinarySearch<T>(T[] array, Func<int, bool> gte)
+    {
+        var l = 0;
+        var r = array.Length - 1;
+        while (l < r)
+        {
+            var m = (l + r) / 2;
+            if (gte(m))
+            {
+                r = m;
+            }
+            else
+            {
+                l = m + 1;
+            }
+        }
+
+        return l;
+    }
 }
