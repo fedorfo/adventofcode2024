@@ -1,4 +1,4 @@
-namespace AdventOfCode2024.Base;
+namespace AdventOfCode2024.Puzzles;
 
 public interface IPuzzle
 {

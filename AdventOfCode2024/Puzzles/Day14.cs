@@ -1,7 +1,6 @@
 namespace AdventOfCode2024.Puzzles;
 
 using System.Text.RegularExpressions;
-using Base;
 using Helpers;
 
 public class Day14 : PuzzleBase
@@ -10,7 +9,7 @@ public class Day14 : PuzzleBase
     private const int Height = 103; // 7;
 
 
-    private int Normalize(int x, int maxValue)
+    private static int Normalize(int x, int maxValue)
     {
         x %= maxValue;
         if (x < 0)
@@ -21,13 +20,13 @@ public class Day14 : PuzzleBase
         return x;
     }
 
-    private List<V2> GetPositions(List<(V2 P, V2 V)> robots, int time) =>
+    private static List<V2> GetPositions(List<(V2 P, V2 V)> robots, int time) =>
         robots
             .Select(x => x.P + (x.V * time))
-            .Select(x => new V2(this.Normalize(x.X, Width), this.Normalize(x.Y, Height)))
+            .Select(x => new V2(Normalize(x.X, Width), Normalize(x.Y, Height)))
             .ToList();
 
-    private bool LooksLikeChristmasTree(List<V2> positions)
+    private static bool LooksLikeChristmasTree(List<V2> positions)
     {
         var positionsSet = positions.ToHashSet();
         var visited = new HashSet<V2>();
@@ -60,7 +59,7 @@ public class Day14 : PuzzleBase
                     .Select(int.Parse)
                     .ToArray())
             .Select(x => (P: new V2(x[0], x[1]), V: new V2(x[2], x[3]))).ToList();
-        var positions100 = this.GetPositions(robots, 100);
+        var positions100 = GetPositions(robots, 100);
         var ranges = new[]
         {
             (Start: new V2(0, 0), End: new V2((Width / 2) - 1, (Height / 2) - 1)),
@@ -79,8 +78,8 @@ public class Day14 : PuzzleBase
 
         for (var step = 0; step < 100000; step++)
         {
-            var positions = this.GetPositions(robots, step);
-            if (this.LooksLikeChristmasTree(positions))
+            var positions = GetPositions(robots, step);
+            if (LooksLikeChristmasTree(positions))
             {
                 Console.WriteLine(step);
                 break;

@@ -1,6 +1,5 @@
 namespace AdventOfCode2024.Puzzles;
 
-using Base;
 using Helpers;
 
 public class Day16 : PuzzleBase
@@ -25,7 +24,7 @@ public class Day16 : PuzzleBase
         Console.WriteLine(result2.Length);
     }
 
-    private class MapWalker(Map map)
+    private sealed class MapWalker(Map map)
     {
         public IEnumerable<((V2 Vertex, V2 Direction), long Distance)> Next((V2 Vertex, V2 Direction) x)
         {
@@ -38,7 +37,7 @@ public class Day16 : PuzzleBase
         }
     }
 
-    private class MapWalker2(Map map, Dictionary<(V2 Vertex, V2 Direction), long> pathDict)
+    private sealed class MapWalker2(Map map, Dictionary<(V2 Vertex, V2 Direction), long> pathDict)
     {
         private IEnumerable<((V2 Vertex, V2 Direction), long Distance)> TryPrev((V2 Vertex, V2 Direction) x)
         {

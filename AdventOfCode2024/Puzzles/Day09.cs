@@ -1,7 +1,5 @@
 namespace AdventOfCode2024.Puzzles;
 
-using Base;
-
 public class Day09 : PuzzleBase
 {
     private static (int[] fiels, int[] spaces) PrepareFilesAndSpaces(int[] diskMap) => (

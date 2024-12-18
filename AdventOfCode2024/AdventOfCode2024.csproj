@@ -5,16 +5,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <NoWarn>$(NoWarn);CA1305;CA2201</NoWarn>
-  </PropertyGroup>
+  </PropertyGroup>  
   <ItemGroup>
-    <None Update="input\*.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="output\*.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <PackageReference Include="morelinq" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="morelinq" Version="4.3.0"/>
+    <EmbeddedResource Include="Resources\*.in" />
+    <EmbeddedResource Include="Resources\*.out" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="output\" />
   </ItemGroup>
 </Project>

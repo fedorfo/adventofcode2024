@@ -1,7 +1,5 @@
 namespace AdventOfCode2024.Puzzles;
 
-using Base;
-
 public class Day02 : PuzzleBase
 {
     private bool IsSafe(int[] report) =>

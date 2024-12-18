@@ -1,13 +1,13 @@
-namespace AdventOfCode2024.Base;
+namespace AdventOfCode2024.Puzzles;
 
 using System.Globalization;
-using Helpers;
+using AdventOfCode2024.Helpers;
 
 public abstract class PuzzleBase : IPuzzle
 {
     public int Day => int.Parse(this.GetType().Name.Replace("Day", ""), CultureInfo.InvariantCulture);
 
-    public virtual string InputFileName => $"{this.Day:00}.txt";
+    public virtual string InputFileName => $"{this.Day:00}.in";
     public abstract void Solve();
 
     protected static IEnumerable<string> ReadBlockLines()

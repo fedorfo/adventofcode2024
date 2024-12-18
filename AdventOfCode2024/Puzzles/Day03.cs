@@ -1,7 +1,6 @@
 namespace AdventOfCode2024.Puzzles;
 
 using System.Text.RegularExpressions;
-using Base;
 
 public class Day03 : PuzzleBase
 {

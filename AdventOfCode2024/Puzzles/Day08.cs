@@ -1,6 +1,5 @@
 namespace AdventOfCode2024.Puzzles;
 
-using Base;
 using Helpers;
 
 public class Day08 : PuzzleBase

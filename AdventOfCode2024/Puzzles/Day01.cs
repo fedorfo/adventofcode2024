@@ -1,7 +1,5 @@
 namespace AdventOfCode2024.Puzzles;
 
-using Base;
-
 public class Day01 : PuzzleBase
 {
     public override void Solve()
