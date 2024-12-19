@@ -4,46 +4,21 @@ using Helpers;
 
 public class Day06 : PuzzleBase
 {
-    private static (V2 position, V2 speed) GetInitialPosition(char[][] map)
-    {
-        for (var i = 0; i < map.Length; i++)
-        for (var j = 0; j < map[0].Length; j++)
-        {
-            if (map[i][j] == '^')
-            {
-                return (new V2(i, j), new V2(-1, 0));
-            }
-        }
-
-        throw new InvalidOperationException("No initial position found");
-    }
-
-    private static (V2 position, V2 speed)? Next(char[][] map, V2 position, V2 speed)
+    private static (V2 position, V2 speed)? Next(Map map, V2 position, V2 speed)
     {
         var next = position + speed;
-        if (!(next >= V2.Zero && next < new V2(map.Length, map[0].Length)))
-        {
-            return null;
-        }
-
-        if (map[next.X][next.Y] == '.')
-        {
-            return (next, speed);
-        }
-
-        return (position, new V2(speed.Y, -speed.X));
+        return map.InBounds(next) ? map[next] == '.' ? (next, speed) : (position, speed.CW()) : null;
     }
 
-    private static int Solve1(char[][] map)
+    private static List<V2>? Solve1((V2 position, V2 speed) start, Map map)
     {
-        var (position, speed) = GetInitialPosition(map);
-        map[position.X][position.Y] = '.';
+        var (position, speed) = start;
         var visited = new HashSet<(V2 Position, V2 speed)>();
         while (true)
         {
             if (!visited.Add((position, speed)))
             {
-                return -1;
+                return null;
             }
 
             var next = Next(map, position, speed);
@@ -56,31 +31,28 @@ public class Day06 : PuzzleBase
             speed = next.Value.speed;
         }
 
-        return visited.Select(x => x.Position).Distinct().Count();
+        return visited.Select(x => x.Position).Distinct().ToList();
     }
 
     public override void Solve()
     {
-        var input = ReadBlockLines().ToList();
-        Console.WriteLine(Solve1(input.Select(x => x.ToArray()).ToArray()));
-        var res2 = 0;
-        for (var i = 0; i < input.Count; i++)
+        var map = ReadMap();
+        var start = (position: map.EnumeratePositions().Single(x => map[x] == '^'), speed: new V2(-1, 0));
+        map[start.position] = '.';
+        var path = Solve1(start, map);
+        Console.WriteLine(path!.Count);
+        var res2 = path.Select(x =>
         {
-            for (var j = 0; j < input[0].Length; j++)
+            if (map[x] == '^' || map[x] == '#')
             {
-                if (input[i][j] == '^')
-                {
-                    continue;
-                }
-
-                var map = input.Select(x => x.ToArray()).ToArray();
-                map[i][j] = '#';
-                if (Solve1(map) == -1)
-                {
-                    res2++;
-                }
+                return 0;
             }
-        }
+
+            map[x] = '#';
+            var result = Solve1(start, map) == null ? 1 : 0;
+            map[x] = '.';
+            return result;
+        }).Sum();
 
         Console.WriteLine(res2);
     }
