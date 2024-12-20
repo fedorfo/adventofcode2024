@@ -12,6 +12,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\*.in" />
     <EmbeddedResource Include="Resources\*.out" />
+    <EmbeddedResource Include="Resources\*.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="output\" />
