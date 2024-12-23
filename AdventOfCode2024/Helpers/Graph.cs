@@ -62,4 +62,37 @@ public static class GraphAlgo
             }
         }
     }
+
+    public static List<HashSet<TVertex>> BronKerbosch<TVertex>(
+        Func<TVertex, IEnumerable<TVertex>> next,
+        HashSet<TVertex> p,
+        HashSet<TVertex>? r = null,
+        HashSet<TVertex>? x = null,
+        List<HashSet<TVertex>>? cliques = null)
+    {
+        cliques ??= [];
+        r ??= [];
+        x ??= [];
+        if (p.Count == 0 && x.Count == 0)
+        {
+            cliques.Add([..r]);
+            return cliques;
+        }
+
+        foreach (var v in p.ToList())
+        {
+            r.Add(v);
+            BronKerbosch(
+                next,
+                p.Intersect(next(v)).ToHashSet(),
+                r,
+                x.Intersect(next(v)).ToHashSet(),
+                cliques);
+            r.Remove(v);
+            p.Remove(v);
+            x.Add(v);
+        }
+
+        return cliques;
+    }
 }

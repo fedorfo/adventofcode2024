@@ -6,6 +6,8 @@ public record Map
 {
     public Map(char[][] Map) => this.map = Map;
 
+    public Map(string[] rows) => this.map = rows.Select(x => x.ToCharArray()).ToArray();
+
     public Map(int h, int w, char fill = '.') =>
         this.map = Enumerable.Range(0, h).Select(_ => Enumerable.Repeat(fill, w).ToArray()).ToArray();
 
