@@ -23,7 +23,7 @@ public class Day22 : PuzzleBase
     }
 
 
-    private Dictionary<(int, int, int, int), int> GetChanges(long secretNumber, int iterations)
+    private static Dictionary<(int, int, int, int), int> GetChanges(long secretNumber, int iterations)
     {
         var numbers = new List<long> { secretNumber };
         for (var i = 0; i < iterations; i++)
@@ -49,7 +49,7 @@ public class Day22 : PuzzleBase
         var secretNumbers = ReadBlockLines().Select(int.Parse).ToArray();
         Console.WriteLine(secretNumbers.Select(x => Next(x, 2000)).Sum());
 
-        var changes = secretNumbers.Select(x => this.GetChanges(x, 2000)).ToArray();
+        var changes = secretNumbers.Select(x => GetChanges(x, 2000)).ToArray();
         var answer = new Dictionary<(int, int, int, int), int>();
         foreach (var change in changes)
         {

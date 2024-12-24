@@ -1,78 +1,98 @@
 namespace AdventOfCode2024.Puzzles;
 
 using Helpers;
-using MoreLinq;
 
 public class Day21 : PuzzleBase
 {
-    private static readonly Map NumericKeypad = new(["789", "456", "123", " 0A"]);
-
-    private static readonly Map RemoteControlKeypad = new([" ^A", "<v>"]);
-
     private static readonly Dictionary<V2, string> Directions = new()
     {
         [new V2(-1, 0)] = "^", [new V2(1, 0)] = "v", [new V2(0, -1)] = "<", [new V2(0, 1)] = ">"
     };
 
-    private static IEnumerable<string> Concat(IEnumerable<string> a, IEnumerable<string> b)
+    private static readonly Map NumericKeypad = new(["789", "456", "123", " 0A"]);
+    private static readonly Map RemoteControlKeypad = new([" ^A", "<v>"]);
+    private readonly List<Dictionary<string, long>> dp;
+    private readonly Dictionary<Map, Dictionary<(char, char), string[]>> keypadWays;
+
+
+    public Day21()
     {
-        foreach (var x in a)
-        foreach (var y in b)
+        this.keypadWays = new Dictionary<Map, Dictionary<(char, char), string[]>>
         {
-            yield return $"{x}{y}";
+            [RemoteControlKeypad] = this.BuildPossibleWaysBetweenKeys(RemoteControlKeypad),
+            [NumericKeypad] = this.BuildPossibleWaysBetweenKeys(NumericKeypad)
+        };
+        var allPotentialWays = this.keypadWays[RemoteControlKeypad].Values
+            .Concat(this.keypadWays[NumericKeypad].Values)
+            .SelectMany(x => x).Distinct().ToList();
+        this.dp = [allPotentialWays.ToDictionary(x => x, x => (long)x.Length)];
+        for (var i = 1; i <= 25; i++)
+        {
+            this.dp.Add(
+                allPotentialWays.ToDictionary(
+                    x => x,
+                    x => this.GetShortestWayLength(this.dp[i - 1], RemoteControlKeypad, x)
+                )
+            );
         }
     }
 
-    private static string[] GetWays(Map keypad, char keyFrom, char keyTo)
+    private Dictionary<(char, char), string[]> BuildPossibleWaysBetweenKeys(Map keypad)
     {
-        if (keyFrom == keyTo)
+        var result = new Dictionary<(char, char), string[]>();
+        foreach (var from in EnumerateKeypadPositions(keypad))
+        foreach (var to in EnumerateKeypadPositions(keypad))
         {
-            return [""];
-        }
-
-        var start = keypad.EnumeratePositions().Single(x => keypad[x] == keyFrom);
-        var end = keypad.EnumeratePositions().Single(x => keypad[x] == keyTo);
-        var result = new List<string>();
-        foreach (var next in start.GetNeighbours4().Where(x => keypad.InBounds(x) && keypad[x] != ' ')
-                     .Where(x => (end - x).ManhattanLength() < (end - start).ManhattanLength()))
-        {
-            var ways = GetWays(keypad, keypad[next], keypad[end]);
-            result.AddRange(Concat([Directions[next - start]], ways));
-        }
-
-        return result.ToArray();
-    }
-
-    private static string[] GetWays(Map keypad, string s)
-    {
-        string[] result = [""];
-        var curKey = 'A';
-        foreach (var key in s)
-        {
-            result = Concat(result, GetWays(keypad, curKey, key)).ToArray();
-            result = Concat(result, ["A"]).ToArray();
-            curKey = key;
+            var fromKey = keypad[from];
+            var toKey = keypad[to];
+            result[(fromKey, toKey)] = this.GetWays(keypad, fromKey, toKey);
         }
 
         return result;
     }
 
+    private static IEnumerable<V2> EnumerateKeypadPositions(Map keypad) =>
+        keypad.EnumeratePositions().Where(x => keypad[x] != ' ');
 
-    private static int Complexity(string code)
+    private string[] GetWays(Map keypad, char keyFrom, char keyTo)
     {
-        Console.WriteLine($"Start complexity {code}");
-        var ways = GetWays(NumericKeypad, code);
-        ways = ways.SelectMany(w=>GetWays(RemoteControlKeypad, w)).Distinct().ToArray();
-        ways = ways.SelectMany(w=>GetWays(RemoteControlKeypad, w)).Distinct().ToArray();
-        //ways = ways.SelectMany(w=>GetWays(RemoteControlKeypad, w)).Distinct().ToArray();
+        if (keyFrom == keyTo)
+        {
+            return ["A"];
+        }
 
-        var shortest = ways.Select(x => x.Length).Min();
-        return shortest * int.Parse(new string(code.Where(char.IsDigit).ToArray()));
+        var start = keypad.EnumeratePositions().Single(x => keypad[x] == keyFrom);
+        var end = keypad.EnumeratePositions().Single(x => keypad[x] == keyTo);
+        var result = new List<string>();
+        foreach (
+            var next in start
+                .GetNeighbours4()
+                .Where(x => keypad.InBounds(x) && keypad[x] != ' ')
+                .Where(x => (end - x).ManhattanLength() < (end - start).ManhattanLength())
+        )
+        {
+            var ways = this.GetWays(keypad, keypad[next], keypad[end]);
+            result.AddRange(Directions[next - start].SelectMany(x => ways.Select(y => $"{x}{y}")));
+        }
+
+        return result.ToArray();
+    }
+
+    private long GetShortestWayLength(Dictionary<string, long> dict, Map keypad, string code) =>
+        $"A{code}".Zip(code,
+            (a, b) => this.keypadWays[keypad][(a, b)].Select(x => dict[x]).Min()
+        ).Sum();
+
+    private long Complexity(int dpLevel, string code)
+    {
+        var shortestWayLength = this.GetShortestWayLength(this.dp[dpLevel], NumericKeypad, code);
+        return shortestWayLength * int.Parse(new string(code.Where(char.IsDigit).ToArray()));
     }
 
     public override void Solve()
     {
         var codes = ReadBlockLines().ToArray();
-        Console.WriteLine(codes.Select(Complexity).Sum());
+        Console.WriteLine(codes.Select(code => this.Complexity(2, code)).Sum());
+        Console.WriteLine(codes.Select(code => this.Complexity(25, code)).Sum());
     }
 }
