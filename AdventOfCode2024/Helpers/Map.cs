@@ -17,7 +17,7 @@ public record Map
         set => this.map[p.X][p.Y] = value;
     }
 
-    public V2 Size => new(this.map.Length, this.map[0].Length);
+    public V2 Size => new(this.map.Length, this.map.Length > 0 ? this.map[0].Length : 0);
     public char[][] map { get; init; }
 
     public char[][] GetMap() => this.map;
