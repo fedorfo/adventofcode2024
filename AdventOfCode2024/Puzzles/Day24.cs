@@ -109,7 +109,6 @@ public class Day24 : PuzzleBase
         var device = new Device(gates);
         Console.WriteLine(CalculateZ(GetNumber("x", wireValues), GetNumber("y", wireValues), device));
         var candidates = new List<(Gate, Gate)>();
-        var sw = Stopwatch.StartNew();
         for (var i = 0; i <= 44; i++)
         {
             if (CalculateZ((long)1 << i, (long)1 << i, device) == (long)1 << (i + 1))
@@ -132,9 +131,6 @@ public class Day24 : PuzzleBase
             }
         }
 
-        Console.WriteLine(sw.Elapsed);
-
-        var sw2 = Stopwatch.StartNew();
         for (var i = 0; i < candidates.Count; i++)
         for (var j = i; j < candidates.Count; j++)
         for (var k = j; k < candidates.Count; k++)
@@ -172,7 +168,6 @@ public class Day24 : PuzzleBase
                             candidates[j].Item2.Out, candidates[k].Item1.Out, candidates[k].Item2.Out,
                             candidates[l].Item1.Out, candidates[l].Item2.Out
                         }.OrderBy(x => x)));
-                Console.WriteLine(sw2.Elapsed);
                 return;
             }
 
